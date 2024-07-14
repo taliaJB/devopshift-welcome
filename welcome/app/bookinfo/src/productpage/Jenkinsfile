@@ -13,7 +13,7 @@ pipeline {
 				script {
 					//Build the docker images
 					sh 'pwd'
-					sh "docker build -f /home/ubuntu/workarea/devopshift/devopshift-welcome/welcome/app/bookinfo/src/productpage/Dockerfile --target build --tag ${IMAGE_NAME}:${VERSION}-build ."
+					sh "docker build -f /home/jenkins/workspace/product_page/Dockerfile --target build --tag ${IMAGE_NAME}:${VERSION}-build ."
 				}	
 
 			}
