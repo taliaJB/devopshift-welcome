@@ -3,6 +3,7 @@ pipeline {
 	agent any
 	environment {
 		CREDENTIALS_ID = 'dh_proj'
+		DOCKER_FILE = '/home/jenkins/workspace/product_page/Dockerfile'
 		IMAGE_NAME = 'productpage'
 		REPO = 'taliadh/cicd_proj'
 		VERSION = 'someversion'
@@ -13,7 +14,7 @@ pipeline {
 				script {
 					//Build the docker images
 					sh 'pwd'
-					sh "docker build -f /home/jenkins/workspace/product_page/Dockerfile --target build --tag ${IMAGE_NAME}:${VERSION}-build ."
+					sh "docker build -f ${DOCKER_FILE} --target build --tag ${IMAGE_NAME}:${VERSION}-build ."
 				}	
 
 			}
@@ -23,7 +24,7 @@ pipeline {
 			steps {
 				script {
 					// Test
-					sh "docker build --target test --tag ${IMAGE_NAME}:${VERSION}-test ."
+					sh "docker build -f ${DOCKER_FILE} --target test --tag ${IMAGE_NAME}:${VERSION}-test ."
 					sh "docker run --rm ${IMAGE_NAME}:${VERSION}-test"
 				}
 			}
@@ -34,7 +35,7 @@ pipeline {
 				script {
 
 					withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:"${CREDENTIALS_ID}", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-						sh "docker build --target run --tag ${IMAGE_NAME}:${VERSION}-stage ."
+						sh "docker build -f ${DOCKER_FILE} --target run --tag ${IMAGE_NAME}:${VERSION}-stage ."
 						sh "docker login -u $USERNAME -p $PASSWORD"
 						sh "docker push ${IMAGE_NAME}:${VERSION}-stage"
 					}				
