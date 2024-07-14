@@ -20,8 +20,8 @@ RUN python -m unittest discover
 ### Run ###
 FROM python:3.12.1-slim as run
 WORKDIR /opt/microservices
-COPY--from=build/usr/local/lib/python3.12/site-packages/usr/local/lib/python3.12/site-packages
-COPY--from=build/opt/microservices/opt/microservices
+COPY --from=build/usr/local/lib/python3.12/site-packages/usr/local/lib/python3.12/site-packages
+COPY --from=build/opt/microservices/opt/microservices
 ARG flood_factor
 ENV FLOOD_FACTOR ${flood_factor:-0}
 EXPOSE 9080
