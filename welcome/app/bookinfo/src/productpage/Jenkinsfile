@@ -3,19 +3,18 @@ pipeline {
 	agent any
 	environment {
 		CREDENTIALS_ID = 'dh_proj'
-                WORKDIR = 'welcome/app/bookinfo/src/productpage/'
+                WORK_DIR = 'welcome/app/bookinfo/src/productpage/'
 		DOCKER_FILE = 'Dockerfile'
 		IMAGE_NAME = 'productpage'
 		REPO = 'taliadh'
-                REPO_IMAGE = "${REPO}/${IMAGE_NAME}"
-		VERSION = 'someversion'
+		VERSION = "v_${env.BUILD_NUMBER}"
 	}
 	stages {
 		stage('Build'){
 			steps {
 				script {
 					//Build the docker images
-					sh "docker build -f ${WORKDIR}${DOCKER_FILE} --target build --tag ${IMAGE_NAME}:${VERSION}-build ${WORKDIR}"
+					sh "docker build -f ${WORK_DIR}${DOCKER_FILE} --target build --tag ${IMAGE_NAME}:${VERSION}-build ${WORK_DIR}"
 				}	
 
 			}
@@ -26,7 +25,7 @@ pipeline {
 				script {
 					// Test
                                         sh '''
-					docker build -f ${WORKDIR}${DOCKER_FILE} --target test --tag ${IMAGE_NAME}:${VERSION}-test ${WORKDIR}
+					docker build -f ${WORK_DIR}${DOCKER_FILE} --target test --tag ${IMAGE_NAME}:${VERSION}-test ${WORK_DIR}
 					docker run --rm ${IMAGE_NAME}:${VERSION}-test
                                         '''
 				}
@@ -39,9 +38,9 @@ pipeline {
 
                                         docker.withRegistry("", "${CREDENTIALS_ID}") {
                                                 sh '''
-						docker build -f ${WORKDIR}${DOCKER_FILE} --target run --tag ${REPO_IMAGE}:${VERSION}-stage ${WORKDIR}
-                                                docker tag ${REPO_IMAGE}:${VERSION}-stage ${REPO_IMAGE}:latest
-						docker push ${REPO_IMAGE}:latest
+						docker build -f ${WORK_DIR}${DOCKER_FILE} --target run --tag ${REPO}/${IMAGE_NAME}:${VERSION}-stage ${WORK_DIR}
+                                                docker tag ${REPO_IMAGE}:${VERSION}-stage ${REPO}/${IMAGE_NAME}:latest
+						docker push ${REPO}/${IMAGE_NAME}:latest
                                                 '''
 					}				
 				}	
