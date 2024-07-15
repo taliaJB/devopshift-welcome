@@ -7,7 +7,7 @@ pipeline {
 		DOCKER_FILE = 'Dockerfile'
 		IMAGE_NAME = 'productpage'
 		REPO = 'taliadh'
-                REPO_IMAGE = "${REPO}/${IMAGE_NAME}"dd
+                REPO_IMAGE = "${REPO}/${IMAGE_NAME}"
 		VERSION = 'someversion'
 	}
 	stages {
