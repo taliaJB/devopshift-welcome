@@ -6,7 +6,7 @@ pipeline {
                 WORKDIR = 'welcome/app/bookinfo/src/productpage/'
 		DOCKER_FILE = 'Dockerfile'
 		IMAGE_NAME = 'productpage'
-		REPO = 'taliadh/'
+		REPO = 'taliadh'
 		VERSION = 'someversion'
 	}
 	stages {
@@ -35,10 +35,12 @@ pipeline {
 			steps {
 				script {
 
-					withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:"${CREDENTIALS_ID}", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-						sh "docker build -f ${WORKDIR}${DOCKER_FILE} --target run --tag ${IMAGE_NAME}:${VERSION}-stage ${WORKDIR}"
-						sh "docker login -u $USERNAME -p $PASSWORD"
-						sh "docker push ${REPO}${IMAGE_NAME}:${VERSION}-stage"
+                                        docker.withRegistry("https://index.docker.io/v1", "${CREDENTIALS_ID}") {
+                                                sh '''
+						docker build -f ${WORKDIR}${DOCKER_FILE} --target run --tag ${IMAGE_NAME}:${VERSION}-stage ${WORKDIR}
+						docker login -u $USERNAME -p $PASSWORD
+						docker push ${REPO}/${IMAGE_NAME}:${VERSION}-stage
+                                                '''
 					}				
 				}	
 			}
