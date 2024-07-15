@@ -38,8 +38,9 @@ pipeline {
 
                                         docker.withRegistry("", "${CREDENTIALS_ID}") {
                                                 sh '''
-						docker build -f ${WORK_DIR}${DOCKER_FILE} --target run --tag ${REPO}/${IMAGE_NAME}:${VERSION}-stage ${WORK_DIR}
-                                                docker tag ${REPO}/${IMAGE_NAME}:${VERSION}-stage ${REPO}/${IMAGE_NAME}:latest
+						docker build -f ${WORK_DIR}${DOCKER_FILE} --target run --tag ${REPO}/${IMAGE_NAME}:${VERSION} ${WORK_DIR}
+						docker push ${REPO}/${IMAGE_NAME}:${VERSION}
+                                                docker tag ${REPO}/${IMAGE_NAME}:${VERSION} ${REPO}/${IMAGE_NAME}:latest
 						docker push ${REPO}/${IMAGE_NAME}:latest
                                                 '''
 					}				
