@@ -3,7 +3,7 @@ pipeline {
 	agent any
 	environment {
 		CREDENTIALS_ID = 'dh_proj'
-		DOCKER_FILE = '/home/jenkins/workspace/product_page/Dockerfile'
+		DOCKER_FILE = 'welcome/app/bookinfo/src/productpage/Dockerfile'
 		IMAGE_NAME = 'productpage'
 		REPO = 'taliadh/cicd_proj'
 		VERSION = 'someversion'
