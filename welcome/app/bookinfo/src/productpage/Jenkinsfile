@@ -7,6 +7,7 @@ pipeline {
 		DOCKER_FILE = 'Dockerfile'
 		IMAGE_NAME = 'productpage'
 		REPO = 'taliadh'
+                REPO_IMAGE = "${REPO}/${IMAGE_NAME}"
 		VERSION = 'someversion'
 	}
 	stages {
@@ -15,7 +16,7 @@ pipeline {
 				script {
 					//Build the docker images
 					sh 'pwd'
-					sh "docker build -f ${WORKDIR}${DOCKER_FILE} --target build --tag ${IMAGE_NAME}:${VERSION}-build ${WORKDIR}"
+					sh "docker build -f ${WORKDIR}${DOCKER_FILE} --target build --tag ${REPO_IMAGE}:${VERSION}-build ${WORKDIR}"
 				}	
 
 			}
