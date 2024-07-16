@@ -21,8 +21,8 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    docker build --target secure --build-arg SNYK_TOKEN=${SNYK_TOKEN} --tag ${IMAGE_NAME}:${VERSION}-secure ${WORK_DIR}'
-                    docker run --rm ${IMAGE_NAME}:${VERSION}-secure'
+                    docker build --target secure --build-arg SNYK_TOKEN=${SNYK_TOKEN} --tag ${IMAGE_NAME}:${VERSION}-secure ${WORK_DIR}
+                    docker run --rm ${IMAGE_NAME}:${VERSION}-secure
                     '''
                 }
             }
