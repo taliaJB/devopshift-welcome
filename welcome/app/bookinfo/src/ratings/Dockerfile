@@ -1,4 +1,4 @@
-# Build Stage
+### Build ###
 FROM node:21.6-slim AS build
 
 # Install curl
@@ -13,7 +13,7 @@ COPY package.json /opt/microservices/
 WORKDIR /opt/microservices
 RUN npm install
 
-# Lint/Test Stage
+### Lint/Test ###
 FROM build AS lint-test
 
 # Create ESLint configuration file
@@ -22,7 +22,7 @@ RUN npm install eslint --save-dev
 COPY eslint.config.js /opt/microservices/eslint.config.js
 RUN npx eslint /opt/microservices/ratings.js
 
-# Run Stage
+### Run ###
 FROM node:21.6-slim AS run
 
 WORKDIR /opt/microservices
