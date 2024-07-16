@@ -6,7 +6,7 @@ pipeline {
         IMAGE_NAME = 'reviews'
         REPO = 'taliadh'
         VERSION = "v${env.BUILD_NUMBER}"
-        WORK_DIR = "welcome/app/bookinfo/src/reviews/${IMAGE_NAME}/"
+        WORK_DIR = "welcome/app/bookinfo/src/${IMAGE_NAME}/"
         SNYK_TOKEN = "${env.SNYK_TOKEN}"
     }
     stages {
