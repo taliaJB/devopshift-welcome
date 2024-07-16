@@ -48,9 +48,6 @@ pipeline {
         }
     }
     post {
-        always {
-            cleanWs()
-        }
         success {
             echo 'All docker stages completed successfully!'
         }
