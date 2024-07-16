@@ -7,7 +7,7 @@ pipeline {
         REPO = 'taliadh'
         VERSION = "v${env.BUILD_NUMBER}"
         WORK_DIR = "welcome/app/bookinfo/src/reviews/${IMAGE_NAME}/"
-        SNYK_TOKEN = ${env.SNYK_TOKEN}
+        SNYK_TOKEN = "${env.SNYK_TOKEN}"
     }
     stages {
         stage('Build') {
