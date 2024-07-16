@@ -3,10 +3,11 @@ pipeline {
     environment {
         CREDENTIALS_ID = 'dh_proj'
         DOCKER_FILE = 'Dockerfile'
-        IMAGE_NAME = 'ratings'
+        IMAGE_NAME = 'reviews'
         REPO = 'taliadh'
         VERSION = "v${env.BUILD_NUMBER}"
-        WORK_DIR = "welcome/app/bookinfo/src/${IMAGE_NAME}/"
+        WORK_DIR = "welcome/app/bookinfo/src/reviews/${IMAGE_NAME}/"
+        SNYK_TOKEN = ${env.SNYK_TOKEN}
     }
     stages {
         stage('Build') {
@@ -16,12 +17,12 @@ pipeline {
                 }
             }
         }
-        stage('Lint/Test') {
+        stage('Secure') {
             steps {
                 script {
                     sh '''
-                    docker build -f ${WORK_DIR}${DOCKER_FILE} --target lint-test --tag ${IMAGE_NAME}:${VERSION}-lint-test ${WORK_DIR}
-                    docker run --rm ${IMAGE_NAME}:${VERSION}-lint-test
+                    docker build --target secure --build-arg SNYK_TOKEN=${SNYK_TOKEN} --tag ${IMAGE_NAME}:${VERSION}-secure ${WORK_DIR}'
+                    docker run --rm ${IMAGE_NAME}:${VERSION}-secure'
                     '''
                 }
             }
@@ -36,12 +37,12 @@ pipeline {
         stage('Push') {
             steps {
                 script {
-                        docker.withRegistry('', "${CREDENTIALS_ID}") {
-                            sh '''
-                            docker tag ${REPO}/${IMAGE_NAME}:${VERSION} ${REPO}/${IMAGE_NAME}:latest
-                            docker push ${REPO}/${IMAGE_NAME}:${VERSION}
-                            docker push ${REPO}/${IMAGE_NAME}:latest
-                            '''
+                    docker.withRegistry('', "${CREDENTIALS_ID}") {
+                        sh '''
+                        docker tag ${REPO}/${IMAGE_NAME}:${VERSION} ${REPO}/${IMAGE_NAME}:latest
+                        docker push ${REPO}/${IMAGE_NAME}:${VERSION}
+                        docker push ${REPO}/${IMAGE_NAME}:latest
+                        '''
                     }
                 }
             }
@@ -49,10 +50,10 @@ pipeline {
     }
     post {
         success {
-            echo 'All docker stages completed successfully!'
+            echo 'Docker image build, security check, and push successful!'
         }
         failure {
-            echo 'Oops; Something went wrong :/'
+            echo 'Docker image build, security check, or push failed.'
         }
     }
 }
