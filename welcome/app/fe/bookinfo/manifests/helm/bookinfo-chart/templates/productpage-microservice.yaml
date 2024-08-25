@@ -29,7 +29,8 @@ metadata:
     app: productpage
     version: v1
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 5
+  # replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: productpage
